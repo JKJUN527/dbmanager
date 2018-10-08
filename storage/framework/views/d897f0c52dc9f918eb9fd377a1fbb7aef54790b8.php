@@ -124,7 +124,7 @@
                                                     </td>
                                                     <td><?php echo e($item->num); ?></td>
                                                     <td><?php echo e($item->contacts); ?></td>
-                                                    <td><?php echo e($item->created_at); ?></td>
+                                                    <td><?php echo e(substr($item->created_at,0,10)); ?></td>
                                                 </tr>
                                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </tbody>
@@ -143,137 +143,83 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">配置项管理</h4>
+                    <h4 class="modal-title" id="myModalLabel">集中器/采集器管理</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form-label-left">
                         <div class="form-group">
-                            <label>产品名</label>
+                            <label>号段</label>
                             <input type="text" class="form-control" style="display: none" name="confId" id="confId" value="-1">
+                            <input type="text" class="form-control" name="tablenum" id="tablenum" placeholder="请输入22位号段码，注意不能重复" value="<?php echo e($data['maxnum']); ?>">
+                            <label class="error" for="tablenum"></label>
                         </div>
                         <div class="form-group">
-                                <label>模块名</label>
+                            <label>日期</label>
+                            <fieldset>
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <div class="col-md-11 xdisplay_inputx form-group has-feedback">
+                                            <input type="text" class="form-control has-feedback-left" id="single_cal1" placeholder="First Name" aria-describedby="inputSuccess2Status">
+                                            <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                                            <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <label class="error" for="contacts"></label>
                         </div>
                         <div class="form-group">
-                            <label>配置类型</label>
-                            <select class="form-control show-tick selectpicker" id="conf_type" name="conf_type">
-                                <option value="-1">请选择配置类型</option>
-                                <option value="0">key(配置值，通用key-value)</option>
-                                <option value="1">cdb(配置值，用于mysql信息记录)</option>
-                                <option value="2">cvm(配置值，用于服务器信息记录)</option>
+                            <label>厂家</label>
+                            <select class="form-control show-tick selectpicker" id="vender" name="vender">
+                                <option value="-1">请选择厂家</option>
+                                <?php $__currentLoopData = $data['vender']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($item->id); ?>"><?php echo e($item->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
-                            <label class="error" for="conf_type"></label>
+                            <label class="error" for="vender"></label>
                         </div>
-                        <div class="keyvalue info_module">
-                            <div class="form-group">
-                                <label>配置名称</label>
-                                <input type="text" class="form-control" placeholder="请输入配置名称" name="key_conf_name" id="key_conf_name">
-                                <label class="error" for="key_conf_name"></label>
-                            </div>
-                            <div class="form-group">
-                                <label>配置值</label>
-                                <input type="text" class="form-control" placeholder="请输入配置值" name="key_conf_value" id="key_conf_value">
-                                <label class="error" for="key_conf_value"></label>
-                            </div>
+                        <div class="form-group">
+                            <label>单位</label>
+                            <select class="form-control show-tick selectpicker" id="region" name="region">
+                                <option value="0">新城</option>
+                                <option value="1">龙泉</option>
+                                <option value="2">双流</option>
+                            </select>
+                            <label class="error" for="region"></label>
                         </div>
-                        <div class="cvm info_module">
-                            <div class="form-group">
-                                <label>配置名称</label>
-                                <input type="text" class="form-control" placeholder="请输入配置名称" value="iplist" disabled>
-                            </div>
-                            <div class="form-group">
-                                <label>配置值导入方式</label>
-                                <select class="form-control show-tick selectpicker" id="cvm_inport_type" name="cvm_inport_type">
-                                    <option value="-1">请选择配置值导入方式</option>
-                                    <option value="0">手动输入,多个IP用分号分隔,固定IP</option>
-                                    <option value="1">从四级业务模块id导入,后续会同步更新(推荐)</option>
-                                </select>
-                                <input type="text" class="form-control" style="margin-top: 1rem;" placeholder="请输入配置值" name="cvm_conf_value" id="cvm_conf_value">
-                                <label class="error" for="cvm_conf_value"></label>
-                            </div>
+                        <div class="form-group">
+                            <label>业主单位名称</label>
+                            <input type="text" class="form-control" name="company" id="company" placeholder="请输入业主单位名称">
+                            <label class="error" for="company"></label>
                         </div>
-                        <div class="cdb info_module">
-                            <div class="form-group">
-                                <label class="info_title">主库信息，必填</label>
-                                <label>db-conf-name</label>
-                                <input type="text" class="form-control" placeholder="说明此DB的用途-配置名称" name="cdb_conf_name" id="cdb_conf_name">
-                                <label class="error" for="cdb_conf_name"></label>
-                                <label>db-name</label>
-                                <input type="text" class="form-control" placeholder="此DB的名称" name="cdb_db_name" id="cdb_db_name">
-                                <label class="error" for="cdb_db_name"></label>
-                                <label>db-ip</label>
-                                <input type="text" class="form-control" placeholder="此DB的IP" name="cdb_db_ip" id="cdb_db_ip">
-                                <label class="error" for="cdb_db_ip"></label>
-                                <label>db-port</label>
-                                <input type="text" class="form-control" placeholder="此DB的PORT" name="cdb_db_port" id="cdb_db_port">
-                                <label class="error" for="cdb_db_port"></label>
-                                <label>db-user</label>
-                                <input type="text" class="form-control" placeholder="此DB的用户名" name="cdb_db_user" id="cdb_db_user">
-                                <label class="error" for="cdb_db_user"></label>
-                                <label>db-pass</label>
-                                <input type="text" class="form-control" placeholder="此DB的连接密码" name="cdb_db_pass" id="cdb_db_pass">
-                                <label class="error" for="cdb_db_pass"></label>
-                            </div>
-                            <div class="form-group">
-                                <label class="info_title">mysql-db从库信息,没有可为空</label>
-                                <label>db-slave-name</label>
-                                <input type="text" class="form-control" placeholder="此DB的名称" name="cdb_db_slave_name" id="cdb_db_slave_name">
-                                <label class="error" for="cdb_db_slave_name"></label>
-                                <label>db-slave-ip</label>
-                                <input type="text" class="form-control" placeholder="db-slave-ip" name="cdb_db_slave_ip" id="cdb_db_slave_ip">
-                                <label class="error" for="cdb_db_slave_ip"></label>
-                                <label>db-slave-port</label>
-                                <input type="text" class="form-control" placeholder="db-slave-port" name="cdb_db_slave_port" id="cdb_db_slave_port">
-                                <label class="error" for="cdb_db_slave_port"></label>
-                                <label>db-slave-user</label>
-                                <input type="text" class="form-control" placeholder="db-slave-user" name="cdb_db_slave_user" id="cdb_db_slave_user">
-                                <label class="error" for="cdb_db_slave_user"></label>
-                                <label>db-slave-pass</label>
-                                <input type="text" class="form-control" placeholder="db-slave-pass" name="cdb_db_slave_pass" id="cdb_db_slave_pass">
-                                <label class="error" for="cdb_db_slave_pass"></label>
-                            </div>
-                            <div class="form-group">
-                                <label class="info_title">mysql-只读DB信息,没有可为空</label>
-                                <label>db-read-slave-name</label>
-                                <input type="text" class="form-control" placeholder="此DB的名称" name="cdb_db_read_slave_name" id="cdb_db_read_slave_name">
-                                <label class="error" for="cdb_db_read_slave_name"></label>
-                                <label>db-read-slave-ip</label>
-                                <input type="text" class="form-control" placeholder="db-slave-ip" name="cdb_db_read_slave_ip" id="cdb_db_read_slave_ip">
-                                <label class="error" for="cdb_db_read_slave_ip"></label>
-                                <label>db-read-slave-port</label>
-                                <input type="text" class="form-control" placeholder="db-slave-port" name="cdb_db_read_slave_port" id="cdb_db_read_slave_port">
-                                <label class="error" for="cdb_db_read_slave_port"></label>
-                                <label>db-read-slave-user</label>
-                                <input type="text" class="form-control" placeholder="db-slave-user" name="cdb_db_read_slave_user" id="cdb_db_read_slave_user">
-                                <label class="error" for="cdb_db_read_slave_user"></label>
-                                <label>db-read-slave-pass</label>
-                                <input type="text" class="form-control" placeholder="db-slave-pass" name="cdb_db_read_slave_pass" id="cdb_db_read_slave_pass">
-                                <label class="error" for="cdb_db_read_slave_pass"></label>
-                            </div>
-                            <div class="modify-cdb form-group">
-                                <label class="info_title">修改DB配置信息</label>
-                                <label>db-name</label>
-                                <input type="text" class="form-control" placeholder="此DB的名称" name="modify_db_name" id="modify_db_name">
-                                <label class="error" for="modify_db_name"></label>
-                                <label>db-ip</label>
-                                <input type="text" class="form-control" placeholder="db-ip" name="modify_db_ip" id="modify_db_ip">
-                                <label class="error" for="modify_db_ip"></label>
-                                <label>db-port</label>
-                                <input type="text" class="form-control" placeholder="db-port" name="modify_db_port" id="modify_db_port">
-                                <label class="error" for="modify_db_port"></label>
-                                <label>db-user</label>
-                                <input type="text" class="form-control" placeholder="db-slave-user" name="modify_db_user" id="modify_db_user">
-                                <label class="error" for="modify_db_user"></label>
-                                <label>db-pass</label>
-                                <input type="text" class="form-control" placeholder="db-pass" name="modify_db_pass" id="modify_db_pass">
-                                <label class="error" for="modify_db_pass"></label>
-                            </div>
+                        <div class="form-group">
+                            <label>工程名称</label>
+                            <input type="text" class="form-control" name="project" id="project" placeholder="请输入工程名称">
+                            <label class="error" for="project"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>类型</label>
+                            <select class="form-control show-tick selectpicker" id="type" name="type">
+                                <option value="0">集中器</option>
+                                <option value="1">采集器</option>
+                            </select>
+                            <label class="error" for="type"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>数量</label>
+                            <input type="number" class="form-control" name="num" id="num" value="1">
+                            <label class="error" for="num"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>联系人</label>
+                            <input type="text" class="form-control" name="contacts" id="contacts" placeholder="没有可为空">
+                            <label class="error" for="contacts"></label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="modify-conf">提交更改</button>
+                    <button type="button" class="btn btn-primary" id="modify-post">提交更改</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -286,10 +232,104 @@
     <script src="<?php echo e(asset('/vendors/sidebar/sidebar-menu.js')); ?>"></script>
     <script>
         $('#pick_time').click(function () {
-            alert($('#reservation').val());
+            $.ajax({
+                url: "/db/table1?date=" + $('#reservation').val(),
+                type: "get",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+            })
         });
+        //验证号段是否符合规定
+        $('#tablenum').blur(function () {
+            var reg = /^\d+$/;
+            var num = $('#tablenum');
+            if(num.val() === "" || num.val().length !=22){
+                setError(num,'tablenum','号段必须是22位整数');
+                return;
+            }else if(!reg.test(num.val())){
+                setError(num,'tablenum','号段必须是22位非重复整数');
+                return;
+            }else{
+                removeError(num,'tablenum');
+            }
+            var formData = new FormData();
+            formData.append('tablenum', num.val());
+            $.ajax({
+                url: "/db/table1/checkTableNum",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    if(result.status != 200){
+                        setError(num,'tablenum',result.msg);
+                        return;
+                    }else{
+                        removeError(num,'tablenum');
+                    }
+                }
+            })
 
-        $(".main_container .right_col").css('min-height',h + 'px');
+        });
+        $('#modify-post').click(function () {
+            var tablenum = $('input[name=tablenum]').val();
+            var single_cal1 = $('input[id=single_cal1]').val();
+            var vender = $('select[name=vender] option:selected');
+            var region = $('select[name=region] option:selected');
+            var company = $('input[name=company]').val();
+            var project = $('input[name=project]').val();
+            var type = $('select[name=type]').val();
+            var num = $('input[name=num]').val();
+            var contacts = $('input[name=contacts]').val();
+            if(vender.val() == -1){
+                setError($('select[name=vender]'),'vender','请选择厂家');
+                return;
+            }else{
+                removeError($('select[name=vender]'),'vender');
+            }
+            if(company == ""){
+                setError($('input[name=company]'),'company','请输入业主单位名称');
+                return;
+            }else{
+                removeError($('input[name=company]'),'company');
+            }
+            if(project == ""){
+                setError($('input[name=project]'),'project','请输入工程名称');
+                return;
+            }else{
+                removeError($('input[name=project]'),'project');
+            }
+            var formData = new FormData();
+            formData.append('tablenum', tablenum);
+            formData.append('date', single_cal1);
+            formData.append('vender', $.trim(vender.text()));
+            formData.append('region', $.trim(region.text()));
+            formData.append('company', company);
+            formData.append('project', project);
+            formData.append('type', type);
+            formData.append('num', num);
+            formData.append('contacts', contacts);
+            $.ajax({
+                url: "/db/table1/postdata",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    checkResult(result.status,result.msg,null);
+                }
+            })
+
+        });
+        
     </script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

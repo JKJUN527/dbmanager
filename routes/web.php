@@ -16,7 +16,8 @@ Route::get('/home', ['uses' => 'HomeController@home']);//
 
 //table1管理 -集中器、采集器
 Route::get('/db/table1', ['uses' => 'DBTable1Controller@index']);//页面显示
-Route::post('/db/table1/check', ['uses' => 'QSDBRegionController@checkregion']);//检查名称是否重复
+Route::post('/db/table1/checkTableNum', ['uses' => 'HomeController@checkTableNum']);//检查号段是否重复
+Route::post('/db/table1/postdata', ['uses' => 'DBTable1Controller@postdata']);//提交数据
 
 
 //区域管理
