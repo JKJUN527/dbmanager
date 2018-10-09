@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', '集中器/采集器')
+@section('title', '低压互感器')
 
 {{--@section('header-tab')--}}
     {{--@include('components.headerTab')--}}
@@ -56,7 +56,7 @@
 @section('content')
     <div class="container body">
         <div class="main_container">
-                @include('components.indexNav',['activeIndex'=>0,'activeIndexSecend'=>0])
+                @include('components.indexNav',['activeIndex'=>0,'activeIndexSecend'=>2])
                 @include('components.headerNav',['activeIndex'=>1])
                 <div class="right_col" role="main">
                     <div class="">
@@ -65,7 +65,7 @@
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>集中器/采集器 <small>在这里查询、处理集中器/采集器</small></h2>
+                                        <h2>低压互感器 <small>在这里查询、处理低压互感器</small></h2>
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                             </li>
@@ -85,7 +85,7 @@
                                                             <div class="controls">
                                                                 <div class="input-prepend input-group">
                                                                     <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                                                                    <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="01/01/2018 - 10/06/2018" />
+                                                                    <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" />
                                                                     <button type="button" class="btn btn-info" id="pick_time">开始查询</button>
                                                                     <button type="button" class="btn btn-danger" id="clear_time">清除时间</button>
                                                                 </div>
@@ -100,30 +100,42 @@
                                             <tr>
                                                 <th>号段</th>
                                                 <th>厂家</th>
+                                                <th>型号</th>
+                                                <th>变比</th>
+                                                <th>准确度等级</th>
                                                 <th>单位</th>
-                                                <th>业主单位名称</th>
+                                                <th>申请单位</th>
                                                 <th>工程名称</th>
-                                                <th>类型</th>
                                                 <th>数量</th>
                                                 <th>联系人</th>
                                                 <th>日期</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($data['collector'] as $item)
+                                            @foreach($data['lowtransformer'] as $item)
                                                 <tr>
                                                     <td>{{$item->start_table_num}}</td>
                                                     <td>{{$item->vender_name}}</td>
+                                                    <td>{{$item->model}}</td>
+                                                    <td>{{$item->variable}}</td>
+                                                    <td>
+                                                        @if($item->accuracy == 0)
+                                                            1
+                                                        @elseif($item->accuracy == 1)
+                                                            2
+                                                        @elseif($item->accuracy == 2)
+                                                            0.2
+                                                        @elseif($item->accuracy == 3)
+                                                            0.5
+                                                        @elseif($item->accuracy == 4)
+                                                            0.2S
+                                                        @elseif($item->accuracy == 5)
+                                                            0.5S
+                                                        @endif
+                                                    </td>
                                                     <td>{{$item->region}}</td>
                                                     <td>{{$item->company}}</td>
                                                     <td>{{$item->project}}</td>
-                                                    <td>
-                                                        @if($item->type == 0)
-                                                            集中器
-                                                        @else
-                                                            采集器
-                                                        @endif
-                                                    </td>
                                                     <td>{{$item->num}}</td>
                                                     <td>{{$item->contacts}}</td>
                                                     <td>{{substr($item->created_at,0,10)}}</td>
@@ -145,7 +157,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">集中器/采集器管理</h4>
+                    <h4 class="modal-title" id="myModalLabel">低压互感器管理</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form-label-left">
@@ -172,13 +184,31 @@
                         </div>
                         <div class="form-group">
                             <label>厂家</label>
-                            <select class="form-control show-tick selectpicker" id="vender" name="vender">
-                                <option value="-1">请选择厂家</option>
-                                @foreach($data['vender'] as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control" name="vender" id="vender" placeholder="请输入厂家">
                             <label class="error" for="vender"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>型号</label>
+                            <input type="text" class="form-control" name="model" id="model" placeholder="请输入型号">
+                            <label class="error" for="model"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>变比</label>
+                            <input type="text" class="form-control" name="variable" id="variable" placeholder="请输入变比(xx/xx)">
+                            <label class="error" for="variable"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>准确度等级</label>
+                            <select class="form-control show-tick selectpicker" id="accuracy" name="accuracy">
+                                <option value="-1">请选择准确度等级</option>
+                                <option value="0">1</option>
+                                <option value="1">2</option>
+                                <option value="2">0.2</option>
+                                <option value="3">0.5</option>
+                                <option value="4">0.2S</option>
+                                <option value="5">0.5S</option>
+                            </select>
+                            <label class="error" for="accuracy"></label>
                         </div>
                         <div class="form-group">
                             <label>单位</label>
@@ -191,22 +221,14 @@
                             <label class="error" for="region"></label>
                         </div>
                         <div class="form-group">
-                            <label>业主单位名称</label>
-                            <input type="text" class="form-control" name="company" id="company" placeholder="请输入业主单位名称">
+                            <label>申请单位</label>
+                            <input type="text" class="form-control" name="company" id="company" placeholder="请输入申请单位名称">
                             <label class="error" for="company"></label>
                         </div>
                         <div class="form-group">
                             <label>工程名称</label>
                             <input type="text" class="form-control" name="project" id="project" placeholder="请输入工程名称">
                             <label class="error" for="project"></label>
-                        </div>
-                        <div class="form-group">
-                            <label>类型</label>
-                            <select class="form-control show-tick selectpicker" id="type" name="type">
-                                <option value="0">集中器</option>
-                                <option value="1">采集器</option>
-                            </select>
-                            <label class="error" for="type"></label>
                         </div>
                         <div class="form-group">
                             <label>数量</label>
@@ -235,10 +257,10 @@
     <script src="{{asset('/vendors/sidebar/sidebar-menu.js')}}"></script>
     <script>
         $('#pick_time').click(function () {
-            $(location).attr('href', "/db/table1?date=" + $('#reservation').val());
+            $(location).attr('href', "/db/table3?date=" + $('#reservation').val());
         });
         $('#clear_time').click(function () {
-            $(location).attr('href', "/db/table1");
+            $(location).attr('href', "/db/table3");
         });
         //验证号段是否符合规定
         $('#tablenum').blur(function () {
@@ -278,18 +300,26 @@
         $('#modify-post').click(function () {
             var tablenum = $('input[name=tablenum]').val();
             var single_cal1 = $('input[id=single_cal1]').val();
-            var vender = $('select[name=vender] option:selected');
+            var vender = $('input[name=vender]');
+            var model = $('input[name=model]');
+            var variable = $('input[name=variable]');
+            var accuracy = $('select[name=accuracy]');
             var region = $('select[name=region] option:selected');
             var company = $('input[name=company]').val();
             var project = $('input[name=project]').val();
-            var type = $('select[name=type]').val();
             var num = $('input[name=num]').val();
             var contacts = $('input[name=contacts]').val();
-            if(vender.val() == -1){
-                setError($('select[name=vender]'),'vender','请选择厂家');
+            if(vender.val() == ""){
+                setError($('input[name=vender]'),'vender','请输入厂家');
                 return;
             }else{
-                removeError($('select[name=vender]'),'vender');
+                removeError($('input[name=vender]'),'vender');
+            }
+            if(model.val() == -1){
+                setError(model,'model','请输入型号');
+                return;
+            }else{
+                removeError(model,'model');
             }
             if(company == ""){
                 setError($('input[name=company]'),'company','请输入业主单位名称');
@@ -306,15 +336,17 @@
             var formData = new FormData();
             formData.append('tablenum', tablenum);
             formData.append('date', single_cal1);
-            formData.append('vender', $.trim(vender.text()));
+            formData.append('vender', vender.val());
+            formData.append('model', model.val());
+            formData.append('variable', variable.val());
+            formData.append('accuracy', accuracy.val());
             formData.append('region', $.trim(region.text()));
             formData.append('company', company);
             formData.append('project', project);
-            formData.append('type', type);
             formData.append('num', num);
             formData.append('contacts', contacts);
             $.ajax({
-                url: "/db/table1/postdata",
+                url: "/db/table3/postdata",
                 type: "post",
                 dataType: 'text',
                 cache: false,

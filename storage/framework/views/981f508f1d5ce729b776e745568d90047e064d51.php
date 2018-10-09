@@ -29,7 +29,7 @@
                 <h3>功能区</h3>
                 <ul class="nav side-menu">
                     <li <?php if($activeIndex == 1): ?> class="active" <?php endif; ?>>
-                        <a href="/qsdb/admin">
+                        <a href="/db/vender">
                             <i class="fa fa-edit"></i> 厂家管理
                         </a>
                     </li>

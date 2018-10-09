@@ -39,14 +39,8 @@
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="x_panel">
-                                    @if($data['has_auth'] == 0)
                                         <div class="x_title">
-                                            <h2>你暂无权限进入该目录，请联系超级管理员</h2>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    @else
-                                        <div class="x_title">
-                                            <h2>权限管理 <small>在这里新增修改权限设置</small></h2>
+                                            <h2>厂家管理 <small>在这里新增修改厂家设置</small></h2>
                                             <ul class="nav navbar-right panel_toolbox">
                                                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                                 </li>
@@ -67,11 +61,9 @@
                                                         {{--<th>--}}
                                                             {{--<input type="checkbox" id="check-all" class="flat">--}}
                                                         {{--</th>--}}
-                                                        <th class="column-title">ID </th>
-                                                        <th class="column-title">更新时间</th>
-                                                        <th class="column-title">人员</th>
-                                                        <th class="column-title">权限列表</th>
-                                                        <th class="column-title">最近处理人</th>
+                                                        <th class="column-title">ID</th>
+                                                        <th class="column-title">厂家名称</th>
+                                                        <th class="column-title">添加时间</th>
                                                         <th class="column-title"><span class="nobr">Action</span>操作</th>
                                                         <th class="bulk-actions" colspan="4">
                                                             <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
@@ -80,19 +72,11 @@
                                                     </thead>
 
                                                     <tbody>
-                                                    @foreach($data['auth'] as $item)
+                                                    @foreach($data['vender'] as $item)
                                                         <tr class="even pointer">
                                                             <td class=" ">{{$item->id}}</td>
+                                                            <td class=" ">{{$item->name}}</td>
                                                             <td class=" ">{{$item->updated_at}}</td>
-                                                            <td class=" ">{{$item->username}}</td>
-                                                            <td class=" ">
-                                                                @if($item->auth == "all")
-                                                                    超级管理员
-                                                                @else
-                                                                    {{$item->auth}}
-                                                                @endif
-                                                            </td>
-                                                            <td class=" ">{{$item->admin}}</td>
                                                             <td class=" ">
                                                                 {{--<button type="button" data-content="{{$item->id}}" class="btn btn-round btn-primary" name="modify">修改</button>--}}
                                                                 <button type="button" data-content="{{$item->id}}" class="btn btn-round btn-danger" name="delete">删除</button>
@@ -102,13 +86,12 @@
                                                     </tbody>
                                                 </table>
                                                 <nav>
-                                                    {!! $data['auth']->links() !!}
+                                                    {!! $data['vender']->links() !!}
                                                 </nav>
                                             </div>
 
 
                                         </div>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -122,37 +105,14 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">权限管理</h4>
+                    <h4 class="modal-title" id="myModalLabel">厂家管理</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form-label-left">
                         <div class="form-group">
-                            <label>用户RTX Name（企业英文名称）</label>
-                            {{--<input type="text" class="form-control" style="display: none" name="user_id" id="user_id" value="-1">--}}
-                            <input type="text" class="form-control" placeholder="请输入人员英文全名" name="rtx_name" id="rtx_name">
-                            <label class="error" for="rtx_name"></label>
-                        </div>
-                        <div class="form-group">
-                            <label>用户中文全名</label>
-                            <input type="text" class="form-control" placeholder="请输入中文名" name="ch_name" id="ch_name">
-                            <label class="error" for="ch_name"></label>
-                        </div>
-                        <div class="form-group">
-                            <label>权限列表</label>
-                            <select class="form-control show-tick selectpicker" id="auth_list" name="auth_list">
-                                <option value="-1">请选择相应权限(可多选)</option>
-                                <option value="0">all(超级管理员)</option>
-                                <option value="1">conf(新增、修改、回退配置项管理)</option>
-                                <option value="2">region(新增、修改地域配置)</option>
-                                <option value="3">products(新增、修改产品模块配置)</option>
-                            </select>
-                            <div class="input-group">
-                                <p class="form-control" name="auth_info" id="auth_info"></p>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" onclick="clearAuth()">清除</button>
-                                </span>
-                            </div><!-- /input-group -->
-                            <label class="error" for="auth_list"></label>
+                            <label>厂家名称</label>
+                            <input type="text" class="form-control" placeholder="请输入厂家名称" name="name" id="name">
+                            <label class="error" for="name"></label>
                         </div>
                     </form>
                 </div>
@@ -170,39 +130,16 @@
 @section('custom-script')
     <script>
         $("#modify-auth").click(function () {
-            var rtx_name = $("input[name='rtx_name']");
-            var ch_name = $("input[name='ch_name']");
-            var auth_list = $("#auth_list");
-            var auth_info = $("#auth_info").text();
-            var reg = /^[A-Za-z]+$/; // 判断输入的是不是字母
+            var name = $("input[name='name']");
 
-            if (rtx_name.val() === "") {
-                setError(rtx_name, "rtx_name", "不能为空");
-                return;
-            } else if(! reg.test(rtx_name.val())) {
-                setError(rtx_name, "rtx_name", "只能填写英文字母");
-                return;
-            }else{
-                removeError(rtx_name, "rtx_name");
-            }
-
-            if (ch_name.val() === "") {
-                setError(ch_name, "ch-name", "不能为空");
+            if (name.val() === "") {
+                setError(name, "name", "不能为空");
                 return;
             } else{
-                removeError(ch_name, "ch-name");
+                removeError(name, "name");
             }
-            if(auth_info === ""){
-                setError(auth_list, "auth_list", "不能为空");
-                return;
-            }else{
-                removeError(auth_list, "auth_list");
-            }
-
             var formData = new FormData();
-            formData.append('rtx_name', rtx_name.val());
-            formData.append('ch_name', ch_name.val());
-            formData.append('auth_info', auth_info);
+            formData.append('name', name.val());
 
             $.ajax({
                 url: "/qsdb/admin/add",

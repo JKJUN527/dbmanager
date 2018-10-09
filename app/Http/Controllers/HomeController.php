@@ -9,6 +9,11 @@ namespace App\Http\Controllers;
 
 use App\Auth;
 use App\Collector;
+use App\Hightransformer;
+use App\Hometable;
+use App\Lowtransformer;
+use App\Meteringbox;
+use App\Mixtransformer;
 use Illuminate\Http\Request;
 use App\Products;
 use App\Region;
@@ -41,9 +46,37 @@ class HomeController extends Controller
         $checktable1 = Collector::where('start_table_num','<=',$tablenum)
             ->where('end_table_num','>=',$tablenum)
             ->count();
+        $checktable2 = Hometable::where('start_table_num','<=',$tablenum)
+            ->where('end_table_num','>=',$tablenum)
+            ->count();
+        $checktable3 = Lowtransformer::where('start_table_num','<=',$tablenum)
+            ->where('end_table_num','>=',$tablenum)
+            ->count();
+        $checktable4 = Hightransformer::where('start_table_num','<=',$tablenum)
+            ->where('end_table_num','>=',$tablenum)
+            ->count();
+        $checktable5 = Mixtransformer::where('start_table_num','<=',$tablenum)
+            ->where('end_table_num','>=',$tablenum)
+            ->count();
+        $checktable6 = Meteringbox::where('start_table_num','<=',$tablenum)
+            ->where('end_table_num','>=',$tablenum)
+            ->count();
+
+//        $totalnum = $checktable1 + $checktable2 + $checktable3 + $checktable4 + $checktable5;
         if($checktable1 > 0){
-            $data['msg'] = "号段与集中器表格中重复";
-        }else{
+            $data['msg'] = "号段与集中器表格中号段重复";
+        }elseif ($checktable2 >0){
+            $data['msg'] = "号段与户表表格中号段重复";
+        }elseif ($checktable3 >0){
+            $data['msg'] = "号段与低压互感器表格中号段重复";
+        }elseif ($checktable4 >0){
+            $data['msg'] = "号段与高压互感器表格中号段重复";
+        }elseif ($checktable5 >0){
+            $data['msg'] = "号段与组合式互感器表格中号段重复";
+        }elseif ($checktable6 >0){
+            $data['msg'] = "号段与计量箱表格中号段重复";
+        }
+        else{
             $data['status'] = 200;
         }
         return $data;

@@ -18,26 +18,26 @@ Route::get('/home', ['uses' => 'HomeController@home']);//
 Route::get('/db/table1', ['uses' => 'DBTable1Controller@index']);//页面显示
 Route::post('/db/table1/checkTableNum', ['uses' => 'HomeController@checkTableNum']);//检查号段是否重复
 Route::post('/db/table1/postdata', ['uses' => 'DBTable1Controller@postdata']);//提交数据
-
-
-//区域管理
-Route::get('/db/region', ['uses' => 'QSDBRegionController@regionIndex']);//页面显示
-Route::post('/db/region/check', ['uses' => 'QSDBRegionController@checkregion']);//检查名称是否重复
-Route::post('/qsdb/region/add', ['uses' => 'QSDBRegionController@regionAdd']);//添加区域
-Route::get('/qsdb/region/modify', ['uses' => 'QSDBRegionController@regionModify']);//查询区域详情
-//Route::post('/qsdb/region/delete', ['uses' => 'QSDBController@delete']);//删除区域
-//产品模块管理
-Route::get('/qsdb/products', ['uses' => 'QSDBProductController@productsIndex']);//页面显示
-Route::post('/qsdb/products/add', ['uses' => 'QSDBProductController@productsAdd']);//新增产品及模块记录
-Route::get('/qsdb/products/modify', ['uses' => 'QSDBProductController@productsModify']);//查询模块产品详情
-//配置项管理
-Route::get('/qsdb/conf', ['uses' => 'QSDBConfController@confIndex']);//页面显示
-Route::post('/qsdb/conf/add', ['uses' => 'QSDBConfController@confAdd']);//添加配置项
-Route::post('/qsdb/conf/modifyCheck', ['uses' => 'QSDBConfController@confCheck']);//查询配置项
-Route::post('/qsdb/conf/modifyPost', ['uses' => 'QSDBConfController@confModify']);//上传修改值
-Route::post('/qsdb/conf/rollback', ['uses' => 'QSDBConfController@rollBack']);//回滚上次配置值
+//table2管理  户表
+Route::get('/db/table2', ['uses' => 'DBTable2Controller@index']);//页面显示
+Route::post('/db/table2/postdata', ['uses' => 'DBTable2Controller@postdata']);//提交数据
+//table3管理  低压互感器
+Route::get('/db/table3', ['uses' => 'DBTable3Controller@index']);//页面显示
+Route::post('/db/table3/postdata', ['uses' => 'DBTable3Controller@postdata']);//提交数据
+//table4管理  低压互感器
+Route::get('/db/table4', ['uses' => 'DBTable4Controller@index']);//页面显示
+Route::post('/db/table4/postdata', ['uses' => 'DBTable4Controller@postdata']);//提交数据
+//table5管理  低压互感器
+Route::get('/db/table5', ['uses' => 'DBTable5Controller@index']);//页面显示
+Route::post('/db/table5/postdata', ['uses' => 'DBTable5Controller@postdata']);//提交数据
+//table6管理  低压互感器
+Route::get('/db/table6', ['uses' => 'DBTable6Controller@index']);//页面显示
+Route::post('/db/table6/postdata', ['uses' => 'DBTable6Controller@postdata']);//提交数据
+//table7管理  低压互感器
+Route::get('/db/table7', ['uses' => 'DBTable7Controller@index']);//页面显示
+Route::post('/db/table7/postdata', ['uses' => 'DBTable7Controller@postdata']);//提交数据
 //权限管理
-Route::get('/qsdb/admin', ['uses' => 'QSDBAdminController@adminIndex']);//页面显示
+Route::get('/db/vender', ['uses' => 'QSDBAdminController@index']);//页面显示
 Route::post('/qsdb/admin/add', ['uses' => 'QSDBAdminController@adminAdd']);//添加权限
 Route::post('/qsdb/admin/delete', ['uses' => 'QSDBAdminController@adminDelete']);//删除权限
 

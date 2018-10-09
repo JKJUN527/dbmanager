@@ -1,5 +1,5 @@
 @extends('layout.master')
-@section('title', '集中器/采集器')
+@section('title', '计量箱')
 
 {{--@section('header-tab')--}}
     {{--@include('components.headerTab')--}}
@@ -56,7 +56,7 @@
 @section('content')
     <div class="container body">
         <div class="main_container">
-                @include('components.indexNav',['activeIndex'=>0,'activeIndexSecend'=>0])
+                @include('components.indexNav',['activeIndex'=>0,'activeIndexSecend'=>5])
                 @include('components.headerNav',['activeIndex'=>1])
                 <div class="right_col" role="main">
                     <div class="">
@@ -65,7 +65,7 @@
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="x_panel">
                                     <div class="x_title">
-                                        <h2>集中器/采集器 <small>在这里查询、处理集中器/采集器</small></h2>
+                                        <h2>计量箱 <small>在这里查询、处理计量箱</small></h2>
                                         <ul class="nav navbar-right panel_toolbox">
                                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                             </li>
@@ -85,7 +85,7 @@
                                                             <div class="controls">
                                                                 <div class="input-prepend input-group">
                                                                     <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
-                                                                    <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="01/01/2018 - 10/06/2018" />
+                                                                    <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" />
                                                                     <button type="button" class="btn btn-info" id="pick_time">开始查询</button>
                                                                     <button type="button" class="btn btn-danger" id="clear_time">清除时间</button>
                                                                 </div>
@@ -100,31 +100,35 @@
                                             <tr>
                                                 <th>号段</th>
                                                 <th>厂家</th>
+                                                <th>型号</th>
+                                                <th>表位</th>
                                                 <th>单位</th>
-                                                <th>业主单位名称</th>
+                                                <th>申请单位</th>
                                                 <th>工程名称</th>
-                                                <th>类型</th>
                                                 <th>数量</th>
+                                                <th>表箱类型代码</th>
+                                                <th>表位代码</th>
+                                                <th>厂家代码</th>
+                                                <th>中间位</th>
                                                 <th>联系人</th>
                                                 <th>日期</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($data['collector'] as $item)
+                                            @foreach($data['meteringbox'] as $item)
                                                 <tr>
                                                     <td>{{$item->start_table_num}}</td>
                                                     <td>{{$item->vender_name}}</td>
+                                                    <td>{{$item->model}}</td>
+                                                    <td>{{$item->epitopes}}</td>
                                                     <td>{{$item->region}}</td>
                                                     <td>{{$item->company}}</td>
                                                     <td>{{$item->project}}</td>
-                                                    <td>
-                                                        @if($item->type == 0)
-                                                            集中器
-                                                        @else
-                                                            采集器
-                                                        @endif
-                                                    </td>
                                                     <td>{{$item->num}}</td>
+                                                    <td>{{$item->box_type}}</td>
+                                                    <td>{{$item->epitopes_code}}</td>
+                                                    <td>{{$item->vender_code}}</td>
+                                                    <td>{{$item->middle}}</td>
                                                     <td>{{$item->contacts}}</td>
                                                     <td>{{substr($item->created_at,0,10)}}</td>
                                                 </tr>
@@ -145,7 +149,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">集中器/采集器管理</h4>
+                    <h4 class="modal-title" id="myModalLabel">计量箱</h4>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal form-label-left">
@@ -172,16 +176,21 @@
                         </div>
                         <div class="form-group">
                             <label>厂家</label>
-                            <select class="form-control show-tick selectpicker" id="vender" name="vender">
-                                <option value="-1">请选择厂家</option>
-                                @foreach($data['vender'] as $item)
-                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                @endforeach
-                            </select>
+                            <input type="text" class="form-control" name="vender" id="vender" placeholder="请输入厂家">
                             <label class="error" for="vender"></label>
                         </div>
                         <div class="form-group">
-                            <label>单位</label>
+                            <label>型号</label>
+                            <input type="text" class="form-control" name="model" id="model" placeholder="请输入型号">
+                            <label class="error" for="model"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>表位</label>
+                            <input type="text" class="form-control" name="epitopes" id="epitopes" placeholder="请输入表位">
+                            <label class="error" for="epitopes"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>县公司单位</label>
                             <select class="form-control show-tick selectpicker" id="region" name="region">
                                 <option value="0">新城</option>
                                 <option value="1">龙泉</option>
@@ -191,8 +200,8 @@
                             <label class="error" for="region"></label>
                         </div>
                         <div class="form-group">
-                            <label>业主单位名称</label>
-                            <input type="text" class="form-control" name="company" id="company" placeholder="请输入业主单位名称">
+                            <label>申请单位</label>
+                            <input type="text" class="form-control" name="company" id="company" placeholder="请输入申请单位名称">
                             <label class="error" for="company"></label>
                         </div>
                         <div class="form-group">
@@ -201,17 +210,29 @@
                             <label class="error" for="project"></label>
                         </div>
                         <div class="form-group">
-                            <label>类型</label>
-                            <select class="form-control show-tick selectpicker" id="type" name="type">
-                                <option value="0">集中器</option>
-                                <option value="1">采集器</option>
-                            </select>
-                            <label class="error" for="type"></label>
-                        </div>
-                        <div class="form-group">
                             <label>数量</label>
                             <input type="number" class="form-control" name="num" id="num" value="1">
                             <label class="error" for="num"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>表箱类型代码</label>
+                            <input type="text" class="form-control" name="box_type" id="box_type">
+                            <label class="error" for="box_type"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>表位代码</label>
+                            <input type="text" class="form-control" name="epitopes_code" id="epitopes_code">
+                            <label class="error" for="epitopes_code"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>厂家代码</label>
+                            <input type="text" class="form-control" name="vender_code" id="vender_code" >
+                            <label class="error" for="vender_code"></label>
+                        </div>
+                        <div class="form-group">
+                            <label>中间位</label>
+                            <input type="text" class="form-control" name="middle" id="middle" >
+                            <label class="error" for="middle"></label>
                         </div>
                         <div class="form-group">
                             <label>联系人</label>
@@ -235,10 +256,10 @@
     <script src="{{asset('/vendors/sidebar/sidebar-menu.js')}}"></script>
     <script>
         $('#pick_time').click(function () {
-            $(location).attr('href', "/db/table1?date=" + $('#reservation').val());
+            $(location).attr('href', "/db/table6?date=" + $('#reservation').val());
         });
         $('#clear_time').click(function () {
-            $(location).attr('href', "/db/table1");
+            $(location).attr('href', "/db/table6");
         });
         //验证号段是否符合规定
         $('#tablenum').blur(function () {
@@ -278,18 +299,29 @@
         $('#modify-post').click(function () {
             var tablenum = $('input[name=tablenum]').val();
             var single_cal1 = $('input[id=single_cal1]').val();
-            var vender = $('select[name=vender] option:selected');
+            var vender = $('input[name=vender]');
+            var model = $('input[name=model]');
+            var epitopes = $('input[name=epitopes]');
             var region = $('select[name=region] option:selected');
             var company = $('input[name=company]').val();
             var project = $('input[name=project]').val();
-            var type = $('select[name=type]').val();
             var num = $('input[name=num]').val();
+            var box_type = $('input[name=box_type]').val();
+            var epitopes_code = $('input[name=epitopes_code]').val();
+            var vender_code = $('input[name=vender_code]').val();
+            var middle = $('input[name=middle]').val();
             var contacts = $('input[name=contacts]').val();
-            if(vender.val() == -1){
-                setError($('select[name=vender]'),'vender','请选择厂家');
+            if(vender.val() == ""){
+                setError($('input[name=vender]'),'vender','请输入厂家');
                 return;
             }else{
-                removeError($('select[name=vender]'),'vender');
+                removeError($('input[name=vender]'),'vender');
+            }
+            if(model.val() == -1){
+                setError(model,'model','请输入型号');
+                return;
+            }else{
+                removeError(model,'model');
             }
             if(company == ""){
                 setError($('input[name=company]'),'company','请输入业主单位名称');
@@ -306,15 +338,20 @@
             var formData = new FormData();
             formData.append('tablenum', tablenum);
             formData.append('date', single_cal1);
-            formData.append('vender', $.trim(vender.text()));
+            formData.append('vender', vender.val());
+            formData.append('model', model.val());
+            formData.append('epitopes', epitopes.val());
             formData.append('region', $.trim(region.text()));
             formData.append('company', company);
             formData.append('project', project);
-            formData.append('type', type);
             formData.append('num', num);
+            formData.append('box_type', box_type);
+            formData.append('epitopes_code', epitopes_code);
+            formData.append('vender_code', vender_code);
+            formData.append('middle', middle);
             formData.append('contacts', contacts);
             $.ajax({
-                url: "/db/table1/postdata",
+                url: "/db/table6/postdata",
                 type: "post",
                 dataType: 'text',
                 cache: false,
