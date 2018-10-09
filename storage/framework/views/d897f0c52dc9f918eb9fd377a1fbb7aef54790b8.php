@@ -86,6 +86,7 @@
                                                                     <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                                                                     <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="01/01/2018 - 10/06/2018" />
                                                                     <button type="button" class="btn btn-info" id="pick_time">开始查询</button>
+                                                                    <button type="button" class="btn btn-danger" id="clear_time">清除时间</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -232,14 +233,10 @@
     <script src="<?php echo e(asset('/vendors/sidebar/sidebar-menu.js')); ?>"></script>
     <script>
         $('#pick_time').click(function () {
-            $.ajax({
-                url: "/db/table1?date=" + $('#reservation').val(),
-                type: "get",
-                dataType: 'text',
-                cache: false,
-                contentType: false,
-                processData: false,
-            })
+            $(location).attr('href', "/db/table1?date=" + $('#reservation').val());
+        });
+        $('#clear_time').click(function () {
+            $(location).attr('href', "/db/table1");
         });
         //验证号段是否符合规定
         $('#tablenum').blur(function () {

@@ -19,7 +19,7 @@
     <div class="container body">
         <div class="main_container">
             
-                <?php echo $__env->make('components.indexNav',['activeIndex'=>0,'activeIndexSecend'=>0], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+                <?php echo $__env->make('components.indexNav',['activeIndex'=>3,'activeIndexSecend'=>0], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
             
 
                 <?php echo $__env->make('components.headerNav',['activeIndex'=>1], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

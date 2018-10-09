@@ -18,7 +18,17 @@ class DBTable1Controller extends Controller
     public function index (Request $request)
     {
         $data = array();
-        $data['collector'] = Collector::all();
+        if($request->has('date')){
+            $date = $request->input('date');
+            $starttime = strtotime(explode('-',$date)[0]);
+            $endtime = strtotime(explode('-',$date)[1]);
+            $data['collector'] = Collector::where('created_at','>=',date("Y-m-d", $starttime))
+                ->where('created_at','<=',date("Y-m-d",$endtime))
+                ->get();
+//            return $starttime ."  " . $endtime;
+        }else{
+            $data['collector'] = Collector::all();
+        }
         $data['vender'] = Vender::all();
         //取最大的tablenum
         $data['maxnum'] = Collector::max('end_table_num');

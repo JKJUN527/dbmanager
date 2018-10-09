@@ -20,7 +20,7 @@
     <div class="container body">
         <div class="main_container">
             {{--@section('index-nav')--}}
-                @include('components.indexNav',['activeIndex'=>0,'activeIndexSecend'=>0])
+                @include('components.indexNav',['activeIndex'=>3,'activeIndexSecend'=>0])
             {{--@endsection--}}
 {{--            @section('header-nav')--}}
                 @include('components.headerNav',['activeIndex'=>1])
