@@ -41,4 +41,8 @@ Route::get('/db/vender', ['uses' => 'QSDBAdminController@index']);//页面显示
 Route::post('/qsdb/admin/add', ['uses' => 'QSDBAdminController@adminAdd']);//添加权限
 Route::post('/qsdb/admin/delete', ['uses' => 'QSDBAdminController@adminDelete']);//删除权限
 
+Route::get('/db/homevender', ['uses' => 'QSDBAdminController@homeindex']);//页面显示
+Route::post('/qsdb/admin/homeadd', ['uses' => 'QSDBAdminController@adminhomeAdd']);//添加权限
+Route::post('/qsdb/admin/homedelete', ['uses' => 'QSDBAdminController@adminhomeDelete']);//删除权限
+
 

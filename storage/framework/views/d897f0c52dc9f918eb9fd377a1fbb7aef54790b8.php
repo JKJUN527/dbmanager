@@ -185,6 +185,7 @@
                                 <option value="0">新城</option>
                                 <option value="1">龙泉</option>
                                 <option value="2">双流</option>
+                                <option value="3">天府</option>
                             </select>
                             <label class="error" for="region"></label>
                         </div>

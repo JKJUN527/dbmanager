@@ -29,9 +29,13 @@
                 <h3>功能区</h3>
                 <ul class="nav side-menu">
                     <li @if($activeIndex == 1) class="active" @endif>
-                        <a href="/db/vender">
-                            <i class="fa fa-edit"></i> 厂家管理
+                        <a>
+                            <i class="fa fa-edit"></i> 厂家管理 <span class="fa fa-chevron-down"></span>
                         </a>
+                        <ul class="nav child_menu">
+                            <li @if($activeIndexSecend == 0) class="current-page" @endif><a href="/db/vender">一般厂家管理</a></li>
+                            <li @if($activeIndexSecend == 1) class="current-page" @endif><a href="/db/homevender">户表厂家管理</a></li>
+                        </ul>
                     </li>
                     <li @if($activeIndex == 0) class="active" @endif>
                         <a>
@@ -47,11 +51,11 @@
                             <li @if($activeIndexSecend == 6) class="current-page" @endif><a href="/db/table7">专变终端</a></li>
                         </ul>
                     </li>
-                    <li @if($activeIndex == 2) class="active" @endif>
-                        <a>
-                            <i class="fa fa-table"></i> 变更记录
-                        </a>
-                    </li>
+                    {{--<li @if($activeIndex == 2) class="active" @endif>--}}
+                        {{--<a>--}}
+                            {{--<i class="fa fa-table"></i> 变更记录--}}
+                        {{--</a>--}}
+                    {{--</li>--}}
                     {{--<li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>--}}
                         {{--<ul class="nav child_menu">--}}
                             {{--<li><a href="general_elements.html">General Elements</a></li>--}}

@@ -29,7 +29,7 @@
                     <div class="">
                         <div class="page-title">
                             <div class="title_left">
-                                <h3>Inbox Design <small>Some examples to get you started</small></h3>
+                                <h3>国家电网数据库后台管理系统 <small>点击右侧功能区进行操作</small></h3>
                             </div>
                             <div class="title_right">
                                 <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">

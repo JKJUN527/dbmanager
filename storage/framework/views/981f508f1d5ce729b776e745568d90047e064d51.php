@@ -29,9 +29,13 @@
                 <h3>功能区</h3>
                 <ul class="nav side-menu">
                     <li <?php if($activeIndex == 1): ?> class="active" <?php endif; ?>>
-                        <a href="/db/vender">
-                            <i class="fa fa-edit"></i> 厂家管理
+                        <a>
+                            <i class="fa fa-edit"></i> 厂家管理 <span class="fa fa-chevron-down"></span>
                         </a>
+                        <ul class="nav child_menu">
+                            <li <?php if($activeIndexSecend == 0): ?> class="current-page" <?php endif; ?>><a href="/db/vender">一般厂家管理</a></li>
+                            <li <?php if($activeIndexSecend == 1): ?> class="current-page" <?php endif; ?>><a href="/db/homevender">户表厂家管理</a></li>
+                        </ul>
                     </li>
                     <li <?php if($activeIndex == 0): ?> class="active" <?php endif; ?>>
                         <a>
@@ -47,11 +51,11 @@
                             <li <?php if($activeIndexSecend == 6): ?> class="current-page" <?php endif; ?>><a href="/db/table7">专变终端</a></li>
                         </ul>
                     </li>
-                    <li <?php if($activeIndex == 2): ?> class="active" <?php endif; ?>>
-                        <a>
-                            <i class="fa fa-table"></i> 变更记录
-                        </a>
-                    </li>
+                    
+                        
+                            
+                        
+                    
                     
                         
                             
