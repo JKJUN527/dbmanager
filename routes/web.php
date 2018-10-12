@@ -18,6 +18,8 @@ Route::get('/home', ['uses' => 'HomeController@home']);//
 Route::get('/db/table1', ['uses' => 'DBTable1Controller@index']);//页面显示
 Route::post('/db/table1/checkTableNum', ['uses' => 'HomeController@checkTableNum']);//检查号段是否重复
 Route::post('/db/table1/postdata', ['uses' => 'DBTable1Controller@postdata']);//提交数据
+Route::post('/db/table1/delete', ['uses' => 'DBTable1Controller@delete']);//删除数据
+Route::post('/db/table1/modify', ['uses' => 'DBTable1Controller@modify']);//获取数据
 //table2管理  户表
 Route::get('/db/table2', ['uses' => 'DBTable2Controller@index']);//页面显示
 Route::post('/db/table2/postdata', ['uses' => 'DBTable2Controller@postdata']);//提交数据

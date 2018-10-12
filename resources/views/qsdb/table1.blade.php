@@ -12,7 +12,7 @@
 @section('custom-style')
     <link href="{{asset('/vendors/sidebar/sidebar-menu.css')}}" rel="stylesheet">
     <style>
-        .even .btn{
+        tbody .btn{
             /*margin:0 0 ;*/
             padding: 0 10px 0 10px;
             margin-bottom: 2px;
@@ -107,6 +107,7 @@
                                                 <th>数量</th>
                                                 <th>联系人</th>
                                                 <th>日期</th>
+                                                <th>操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -127,6 +128,10 @@
                                                     <td>{{$item->num}}</td>
                                                     <td>{{$item->contacts}}</td>
                                                     <td>{{substr($item->created_at,0,10)}}</td>
+                                                    <td class=" ">
+                                                        <button type="button" data-content="{{$item->id}}" class="btn btn-round btn-primary" name="modify" >修改</button>
+                                                        <button type="button" data-content="{{$item->id}}" class="btn btn-round btn-danger" name="delete">删除</button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -151,7 +156,7 @@
                     <form class="form-horizontal form-label-left">
                         <div class="form-group">
                             <label>号段</label>
-                            <input type="text" class="form-control" style="display: none" name="confId" id="confId" value="-1">
+                            <input type="text" class="form-control" style="display: none" name="tableid" id="tableid" value="-1">
                             <input type="text" class="form-control" name="tablenum" id="tablenum" placeholder="请输入22位号段码，注意不能重复" value="{{$data['maxnum']}}">
                             <label class="error" for="tablenum"></label>
                         </div>
@@ -276,6 +281,7 @@
 
         });
         $('#modify-post').click(function () {
+            var tableid = $('input[name=tableid]').val();
             var tablenum = $('input[name=tablenum]').val();
             var single_cal1 = $('input[id=single_cal1]').val();
             var vender = $('select[name=vender] option:selected');
@@ -304,6 +310,7 @@
                 removeError($('input[name=project]'),'project');
             }
             var formData = new FormData();
+            formData.append('id', tableid);
             formData.append('tablenum', tablenum);
             formData.append('date', single_cal1);
             formData.append('vender', $.trim(vender.text()));
@@ -328,6 +335,64 @@
             })
 
         });
-        
+        $('.add-link').click(function () {
+            //初始化id为新增状态
+            $('input').val("");
+            $('select[name=vender]').val(-1);
+            $('input[name=tableid]').val(-1);
+            $('input[name=num]').val(1);
+        });
+        $('button[name=delete]').click(function () {
+            var id = $(this).attr('data-content');
+            var formData = new FormData();
+            formData.append('id', id);
+            $.ajax({
+                url: "/db/table1/delete",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    checkResult(result.status,result.msg,null);
+                }
+            })
+        });
+        $('button[name=modify]').click(function () {
+            var id = $(this).attr('data-content');
+            var formData = new FormData();
+            formData.append('id', id);
+            $.ajax({
+                url: "/db/table1/modify",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    //设置数据
+                    if(result.status == 200){
+                        $('input[name=tablenum]').val(result.data.start_table_num);
+                        $('#single_cal1').val(result.data.created_at);
+                        var vender = "option[value="+result.data.vender_name +"]";
+                        var region = "option[value="+result.data.region +"]";
+                        $("select[name=vender]").find(vender).attr("selected",true);
+                        $("select[name=region]").find(region).attr("selected",true);
+                        $('input[name=company]').val(result.data.company);
+                        $('input[name=project]').val(result.data.project);
+                        $('select[name=type]').val(result.data.type);
+                        $('input[name=num]').val(result.data.num);
+                        $('input[name=contacts]').val(result.data.contacts);
+                        $('#addModel').modal('show');
+                    }else {
+                        checkResult(result.status,result.msg,null);
+                    }
+                }
+            })
+        });
     </script>
 @endsection

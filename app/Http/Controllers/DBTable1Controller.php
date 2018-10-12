@@ -43,7 +43,12 @@ class DBTable1Controller extends Controller
         $data = array();
         $data['status'] = 400;
         $data['msg'] = '未知错误';
-        $newcollect = new Collector();
+        $id = $request->input('id');
+        if($id == -1){//新增操作
+            $newcollect = new Collector();
+        }else{
+            $newcollect = Collector::find($id);
+        }
         try{
             $newcollect->vender_name = $request->input('vender');
             $newcollect->region = $request->input('region');
@@ -69,6 +74,34 @@ class DBTable1Controller extends Controller
         }catch (\Illuminate\Database\QueryException $ex) {
             $data['msg'] = "数据库错误" . $ex->getMessage();
             return $data;
+        }
+        return $data;
+    }
+    public function delete(Request $request){
+        $data  = array();
+        $data['status'] = 400;
+        $data['msg'] = '未知错误';
+        $id = $request->input('id');
+        try {
+            Collector::where('id', $id)->delete();
+            $data['status'] = 200;
+            $data['msg'] = '删除成功';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $data['msg'] = "数据库错误" . $ex->getMessage();
+        }
+        return $data;
+    }
+    public function modify(Request $request){
+        $data  = array();
+        $data['status'] = 400;
+        $data['msg'] = '未知错误';
+        $id = $request->input('id');
+        try {
+            $data['data'] = Collector::find($id);
+            $data['status'] = 200;
+            $data['msg'] = '获取成功';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $data['msg'] = "数据库错误" . $ex->getMessage();
         }
         return $data;
     }

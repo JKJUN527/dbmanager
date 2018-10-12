@@ -51,6 +51,11 @@
                             <li @if($activeIndexSecend == 6) class="current-page" @endif><a href="/db/table7">专变终端</a></li>
                         </ul>
                     </li>
+                    <li @if($activeIndex == 2) class="active" @endif>
+                        <a target="_blank" href={{asset('applytable.xls')}}>
+                            <i class="fa fa-download"></i> 检定申请单
+                        </a>
+                    </li>
                     {{--<li @if($activeIndex == 2) class="active" @endif>--}}
                         {{--<a>--}}
                             {{--<i class="fa fa-table"></i> 变更记录--}}

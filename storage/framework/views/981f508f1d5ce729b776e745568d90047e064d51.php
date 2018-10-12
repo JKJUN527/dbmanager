@@ -51,6 +51,11 @@
                             <li <?php if($activeIndexSecend == 6): ?> class="current-page" <?php endif; ?>><a href="/db/table7">专变终端</a></li>
                         </ul>
                     </li>
+                    <li <?php if($activeIndex == 2): ?> class="active" <?php endif; ?>>
+                        <a target="_blank" href=<?php echo e(asset('applytable.xls')); ?>>
+                            <i class="fa fa-download"></i> 检定申请单
+                        </a>
+                    </li>
                     
                         
                             
