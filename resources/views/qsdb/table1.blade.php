@@ -12,11 +12,6 @@
 @section('custom-style')
     <link href="{{asset('/vendors/sidebar/sidebar-menu.css')}}" rel="stylesheet">
     <style>
-        tbody .btn{
-            /*margin:0 0 ;*/
-            padding: 0 10px 0 10px;
-            margin-bottom: 2px;
-        }
         .info_module{
             background-color: #EDEDED;
             padding: 10px 10px;
@@ -87,7 +82,16 @@
                                                                     <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                                                                     <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="01/01/2018 - 10/06/2018" />
                                                                     <button type="button" class="btn btn-info" id="pick_time">开始查询</button>
-                                                                    <button type="button" class="btn btn-danger" id="clear_time">清除时间</button>
+                                                                    <button type="button" class="btn btn-danger" name="clear_time">清除时间</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                <div class="input-prepend input-group">
+                                                                    <input type="text" style="width: 238px" name="table_num" id="table_num" class="form-control" placeholder="输入22位号段查询" />
+                                                                    <button type="button" class="btn btn-info" id="search_tablenum">开始查询</button>
+                                                                    <button type="button" class="btn btn-danger" name="clear_time">清除查询</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -242,7 +246,7 @@
         $('#pick_time').click(function () {
             $(location).attr('href', "/db/table1?date=" + $('#reservation').val());
         });
-        $('#clear_time').click(function () {
+        $('button[name=clear_time]').click(function () {
             $(location).attr('href', "/db/table1");
         });
         //验证号段是否符合规定
@@ -376,12 +380,14 @@
                     var result = JSON.parse(data);
                     //设置数据
                     if(result.status == 200){
+                        $('input[name=tableid]').val(result.data.id);
                         $('input[name=tablenum]').val(result.data.start_table_num);
                         $('#single_cal1').val(result.data.created_at);
-                        var vender = "option[value="+result.data.vender_name +"]";
-                        var region = "option[value="+result.data.region +"]";
-                        $("select[name=vender]").find(vender).attr("selected",true);
-                        $("select[name=region]").find(region).attr("selected",true);
+//                        var vender = "option[text="+result.data.vender_name +"]";
+                        var vender = "select[name=vender] option:contains("+"'"+result.data.vender_name +"')";
+                        var region = "select[name=region] option:contains("+"'"+result.data.region +"')";
+                        $(vender).attr('selected', true);
+                        $(region).attr('selected', true);
                         $('input[name=company]').val(result.data.company);
                         $('input[name=project]').val(result.data.project);
                         $('select[name=type]').val(result.data.type);
@@ -393,6 +399,14 @@
                     }
                 }
             })
+        });
+        $("#search_tablenum").click(function () {
+            var table_num = $('#table_num').val();
+            if(table_num == "" || table_num.length !=22){
+                swal('','请输入22位号段进行查询','error');
+                return;
+            }
+            $(location).attr('href', "/db/table1?tablenum=" + table_num);
         });
     </script>
 @endsection

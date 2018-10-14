@@ -23,21 +23,33 @@ Route::post('/db/table1/modify', ['uses' => 'DBTable1Controller@modify']);//获�
 //table2管理  户表
 Route::get('/db/table2', ['uses' => 'DBTable2Controller@index']);//页面显示
 Route::post('/db/table2/postdata', ['uses' => 'DBTable2Controller@postdata']);//提交数据
+Route::post('/db/table2/delete', ['uses' => 'DBTable2Controller@delete']);//删除数据
+Route::post('/db/table2/modify', ['uses' => 'DBTable2Controller@modify']);//获取数据
 //table3管理  低压互感器
 Route::get('/db/table3', ['uses' => 'DBTable3Controller@index']);//页面显示
 Route::post('/db/table3/postdata', ['uses' => 'DBTable3Controller@postdata']);//提交数据
+Route::post('/db/table3/delete', ['uses' => 'DBTable3Controller@delete']);//删除数据
+Route::post('/db/table3/modify', ['uses' => 'DBTable3Controller@modify']);//获取数据
 //table4管理  低压互感器
 Route::get('/db/table4', ['uses' => 'DBTable4Controller@index']);//页面显示
 Route::post('/db/table4/postdata', ['uses' => 'DBTable4Controller@postdata']);//提交数据
+Route::post('/db/table4/delete', ['uses' => 'DBTable4Controller@delete']);//删除数据
+Route::post('/db/table4/modify', ['uses' => 'DBTable4Controller@modify']);//获取数据
 //table5管理  低压互感器
 Route::get('/db/table5', ['uses' => 'DBTable5Controller@index']);//页面显示
 Route::post('/db/table5/postdata', ['uses' => 'DBTable5Controller@postdata']);//提交数据
+Route::post('/db/table5/delete', ['uses' => 'DBTable5Controller@delete']);//删除数据
+Route::post('/db/table5/modify', ['uses' => 'DBTable5Controller@modify']);//获取数据
 //table6管理  低压互感器
 Route::get('/db/table6', ['uses' => 'DBTable6Controller@index']);//页面显示
 Route::post('/db/table6/postdata', ['uses' => 'DBTable6Controller@postdata']);//提交数据
+Route::post('/db/table6/delete', ['uses' => 'DBTable6Controller@delete']);//删除数据
+Route::post('/db/table6/modify', ['uses' => 'DBTable6Controller@modify']);//获取数据
 //table7管理  低压互感器
 Route::get('/db/table7', ['uses' => 'DBTable7Controller@index']);//页面显示
 Route::post('/db/table7/postdata', ['uses' => 'DBTable7Controller@postdata']);//提交数据
+Route::post('/db/table7/delete', ['uses' => 'DBTable7Controller@delete']);//删除数据
+Route::post('/db/table7/modify', ['uses' => 'DBTable7Controller@modify']);//获取数据
 //权限管理
 Route::get('/db/vender', ['uses' => 'QSDBAdminController@index']);//页面显示
 Route::post('/qsdb/admin/add', ['uses' => 'QSDBAdminController@adminAdd']);//添加权限

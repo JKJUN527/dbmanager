@@ -26,6 +26,11 @@ class DBTable1Controller extends Controller
                 ->where('created_at','<=',date("Y-m-d",$endtime))
                 ->get();
 //            return $starttime ."  " . $endtime;
+        }elseif($request->has('tablenum')){
+            $tablenum = $request->input('tablenum');
+            $data['collector'] = Collector::where('start_table_num','<=',$tablenum)
+                ->where('end_table_num','>=',$tablenum)
+                ->get();
         }else{
             $data['collector'] = Collector::all();
         }

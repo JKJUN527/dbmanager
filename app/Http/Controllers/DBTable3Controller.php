@@ -29,6 +29,11 @@ class DBTable3Controller extends Controller
                 ->where('created_at','<=',date("Y-m-d",$endtime))
                 ->get();
 //            return $starttime ."  " . $endtime;
+        }elseif($request->has('tablenum')){
+            $tablenum = $request->input('tablenum');
+            $data['lowtransformer'] = Lowtransformer::where('start_table_num','<=',$tablenum)
+                ->where('end_table_num','>=',$tablenum)
+                ->get();
         }else{
             $data['lowtransformer'] = Lowtransformer::all();
         }
@@ -46,7 +51,12 @@ class DBTable3Controller extends Controller
         $data = array();
         $data['status'] = 400;
         $data['msg'] = '未知错误';
-        $newdata = new Lowtransformer();
+        $id = $request->input('id');
+        if($id == -1){//新增操作
+            $newdata = new Lowtransformer();
+        }else{
+            $newdata = Lowtransformer::find($id);
+        }
         try{
             $newdata->vender_name = $request->input('vender');
             $newdata->model = $request->input('model');
@@ -74,6 +84,34 @@ class DBTable3Controller extends Controller
         }catch (\Illuminate\Database\QueryException $ex) {
             $data['msg'] = "数据库错误" . $ex->getMessage();
             return $data;
+        }
+        return $data;
+    }
+    public function delete(Request $request){
+        $data  = array();
+        $data['status'] = 400;
+        $data['msg'] = '未知错误';
+        $id = $request->input('id');
+        try {
+            Lowtransformer::where('id', $id)->delete();
+            $data['status'] = 200;
+            $data['msg'] = '删除成功';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $data['msg'] = "数据库错误" . $ex->getMessage();
+        }
+        return $data;
+    }
+    public function modify(Request $request){
+        $data  = array();
+        $data['status'] = 400;
+        $data['msg'] = '未知错误';
+        $id = $request->input('id');
+        try {
+            $data['data'] = Lowtransformer::find($id);
+            $data['status'] = 200;
+            $data['msg'] = '获取成功';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $data['msg'] = "数据库错误" . $ex->getMessage();
         }
         return $data;
     }

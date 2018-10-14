@@ -87,7 +87,16 @@
                                                                     <span class="add-on input-group-addon"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i></span>
                                                                     <input type="text" style="width: 200px" name="reservation" id="reservation" class="form-control" value="01/01/2018 - 10/06/2018" />
                                                                     <button type="button" class="btn btn-info" id="pick_time">开始查询</button>
-                                                                    <button type="button" class="btn btn-danger" id="clear_time">清除时间</button>
+                                                                    <button type="button" class="btn btn-danger" name="clear_time">清除时间</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="control-group">
+                                                            <div class="controls">
+                                                                <div class="input-prepend input-group">
+                                                                    <input type="text" style="width: 238px" name="table_num" id="table_num" class="form-control" placeholder="输入22位号段查询" />
+                                                                    <button type="button" class="btn btn-info" id="search_tablenum">开始查询</button>
+                                                                    <button type="button" class="btn btn-danger" name="clear_time">清除查询</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -106,6 +115,7 @@
                                                 <th>数量</th>
                                                 <th>联系人</th>
                                                 <th>日期</th>
+                                                <th>操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -119,6 +129,10 @@
                                                     <td>{{$item->num}}</td>
                                                     <td>{{$item->contacts}}</td>
                                                     <td>{{substr($item->created_at,0,10)}}</td>
+                                                    <td class=" ">
+                                                        <button type="button" data-content="{{$item->id}}" class="btn btn-round btn-primary" name="modify" >修改</button>
+                                                        <button type="button" data-content="{{$item->id}}" class="btn btn-round btn-danger" name="delete">删除</button>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -143,7 +157,7 @@
                     <form class="form-horizontal form-label-left">
                         <div class="form-group">
                             <label>号段</label>
-                            <input type="text" class="form-control" style="display: none" name="confId" id="confId" value="-1">
+                            <input type="text" class="form-control" style="display: none" name="tableid" id="tableid" value="-1">
                             <input type="text" class="form-control" name="tablenum" id="tablenum" placeholder="请输入22位号段码，注意不能重复" value="{{$data['maxnum']}}">
                             <label class="error" for="tablenum"></label>
                         </div>
@@ -221,7 +235,7 @@
         $('#pick_time').click(function () {
             $(location).attr('href', "/db/table7?date=" + $('#reservation').val());
         });
-        $('#clear_time').click(function () {
+        $('button[name=clear_time]').click(function () {
             $(location).attr('href', "/db/table7");
         });
         //验证号段是否符合规定
@@ -260,6 +274,7 @@
 
         });
         $('#modify-post').click(function () {
+            var tableid = $('input[name=tableid]').val();
             var tablenum = $('input[name=tablenum]').val();
             var single_cal1 = $('input[id=single_cal1]').val();
             var vender = $('select[name=vender] option:selected');
@@ -287,6 +302,7 @@
                 removeError($('input[name=project]'),'project');
             }
             var formData = new FormData();
+            formData.append('id', tableid);
             formData.append('tablenum', tablenum);
             formData.append('date', single_cal1);
             formData.append('vender', $.trim(vender.text()));
@@ -309,6 +325,73 @@
                 }
             })
 
+        });
+        $('.add-link').click(function () {
+            //初始化id为新增状态
+            $('input').val("");
+            $('select[name=vender]').val(-1);
+            $('input[name=tableid]').val(-1);
+            $('input[name=num]').val(1);
+        });
+        $('button[name=delete]').click(function () {
+            var id = $(this).attr('data-content');
+            var formData = new FormData();
+            formData.append('id', id);
+            $.ajax({
+                url: "/db/table7/delete",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    checkResult(result.status,result.msg,null);
+                }
+            })
+        });
+        $('button[name=modify]').click(function () {
+            var id = $(this).attr('data-content');
+            var formData = new FormData();
+            formData.append('id', id);
+            $.ajax({
+                url: "/db/table7/modify",
+                type: "post",
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (data) {
+                    var result = JSON.parse(data);
+                    //设置数据
+                    if(result.status == 200){
+                        $('input[name=tableid]').val(result.data.id);
+                        $('input[name=tablenum]').val(result.data.start_table_num);
+                        $('#single_cal1').val(result.data.created_at);
+                        var vender = "select[name=vender] option:contains("+"'"+result.data.vender_name +"')";
+                        var region = "select[name=region] option:contains("+"'"+result.data.region +"')";
+                        $(vender).attr('selected', true);
+                        $(region).attr('selected', true);
+                        $('input[name=company]').val(result.data.company);
+                        $('input[name=project]').val(result.data.project);
+                        $('input[name=num]').val(result.data.num);
+                        $('input[name=contacts]').val(result.data.contacts);
+                        $('#addModel').modal('show');
+                    }else {
+                        checkResult(result.status,result.msg,null);
+                    }
+                }
+            })
+        });
+        $("#search_tablenum").click(function () {
+            var table_num = $('#table_num').val();
+            if(table_num == "" || table_num.length !=22){
+                swal('','请输入22位号段进行查询','error');
+                return;
+            }
+            $(location).attr('href', "/db/table7?tablenum=" + table_num);
         });
         
     </script>

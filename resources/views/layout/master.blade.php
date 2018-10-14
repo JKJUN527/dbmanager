@@ -98,6 +98,13 @@
 <script src="{{asset('vendors/moment/min/moment.min.js')}}"></script>
 <script src="{{asset('vendors/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
 <script src="{{asset('js/master.js')}}"></script>
+<style>
+    tbody .btn{
+        /*margin:0 0 ;*/
+        padding: 0 10px 0 10px;
+        margin-bottom: 2px;
+    }
+</style>
 <script>
     var h = document.documentElement.clientHeight || document.body.clientHeight;
     $(document).ready(function(){

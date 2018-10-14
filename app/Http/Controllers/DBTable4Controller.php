@@ -30,6 +30,11 @@ class DBTable4Controller extends Controller
                 ->where('created_at','<=',date("Y-m-d",$endtime))
                 ->get();
 //            return $starttime ."  " . $endtime;
+        }elseif($request->has('tablenum')){
+            $tablenum = $request->input('tablenum');
+            $data['hightransformer'] = Hightransformer::where('start_table_num','<=',$tablenum)
+                ->where('end_table_num','>=',$tablenum)
+                ->get();
         }else{
             $data['hightransformer'] = Hightransformer::all();
         }
@@ -47,7 +52,12 @@ class DBTable4Controller extends Controller
         $data = array();
         $data['status'] = 400;
         $data['msg'] = '未知错误';
-        $newdata = new Hightransformer();
+        $id = $request->input('id');
+        if($id == -1){//新增操作
+            $newdata = new Hightransformer();
+        }else{
+            $newdata = Hightransformer::find($id);
+        }
         try{
             $newdata->vender_name = $request->input('vender');
             $newdata->model = $request->input('model');
@@ -76,6 +86,34 @@ class DBTable4Controller extends Controller
         }catch (\Illuminate\Database\QueryException $ex) {
             $data['msg'] = "数据库错误" . $ex->getMessage();
             return $data;
+        }
+        return $data;
+    }
+    public function delete(Request $request){
+        $data  = array();
+        $data['status'] = 400;
+        $data['msg'] = '未知错误';
+        $id = $request->input('id');
+        try {
+            Hightransformer::where('id', $id)->delete();
+            $data['status'] = 200;
+            $data['msg'] = '删除成功';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $data['msg'] = "数据库错误" . $ex->getMessage();
+        }
+        return $data;
+    }
+    public function modify(Request $request){
+        $data  = array();
+        $data['status'] = 400;
+        $data['msg'] = '未知错误';
+        $id = $request->input('id');
+        try {
+            $data['data'] = Hightransformer::find($id);
+            $data['status'] = 200;
+            $data['msg'] = '获取成功';
+        } catch (\Illuminate\Database\QueryException $ex) {
+            $data['msg'] = "数据库错误" . $ex->getMessage();
         }
         return $data;
     }

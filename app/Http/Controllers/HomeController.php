@@ -14,6 +14,7 @@ use App\Hometable;
 use App\Lowtransformer;
 use App\Meteringbox;
 use App\Mixtransformer;
+use App\Terminal;
 use Illuminate\Http\Request;
 use App\Products;
 use App\Region;
@@ -61,6 +62,9 @@ class HomeController extends Controller
         $checktable6 = Meteringbox::where('start_table_num','<=',$tablenum)
             ->where('end_table_num','>=',$tablenum)
             ->count();
+        $checktable7 = Terminal::where('start_table_num','<=',$tablenum)
+            ->where('end_table_num','>=',$tablenum)
+            ->count();
 
 //        $totalnum = $checktable1 + $checktable2 + $checktable3 + $checktable4 + $checktable5;
         if($checktable1 > 0){
@@ -75,6 +79,8 @@ class HomeController extends Controller
             $data['msg'] = "号段与组合式互感器表格中号段重复";
         }elseif ($checktable6 >0){
             $data['msg'] = "号段与计量箱表格中号段重复";
+        }elseif ($checktable7 >0){
+            $data['msg'] = "号段与专变终端表格中号段重复";
         }
         else{
             $data['status'] = 200;
